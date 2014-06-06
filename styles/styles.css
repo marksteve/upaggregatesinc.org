@@ -1,0 +1,148 @@
+@font-face
+{
+font-family: Gotham Light;
+src: url(Gotham-Light.otf);
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+body {
+  background: #fff;
+  color: #666;
+}
+
+li img {
+  display: block;
+  max-height:100%;
+  width:100%;
+}
+
+.scene {
+  padding: 0px;
+  margin: 0px;
+}
+
+.expand-width {
+  width: 100%;
+}
+
+.aspect {
+  opacity: 1;
+}
+
+.layer:nth-child(1) {
+  opacity: 0.5;
+  z-index:10;
+}
+
+.layer:nth-child(2) {
+  opacity: 0.6;
+  z-index:9;
+}
+
+.layer:nth-child(3) {
+  opacity: 0.7;
+  z-index:8;
+}
+
+.layer:nth-child(4) {
+  opacity: 0.8;
+  z-index:7;
+}
+
+.layer:nth-child(5) {
+  opacity: 1;
+  z-index:6;
+}
+
+.layer:nth-child(6) {
+  opacity: 1;
+  z-index:-10;
+}
+
+li {
+	max-height:100%;
+	max-width:100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+#icons {
+	width:150px;
+	height:60px;
+	margin-left:auto;
+	margin-right:auto;
+	position:absolute;
+	z-index: 20;
+	text-align:center;
+	font-family:Nexa Light;
+}
+
+#icons img {
+	width:40px;
+	height:40px;
+	padding:5px;
+}
+
+a:hover {
+	opacity:0.7;
+}
+
+#soon {
+	font-family: Gotham Light;
+	color:#888;
+	text-align:center;
+	z-index: 0;
+}
+
+h1 {
+	font-size:80px;
+}
+
+h4 {
+	font-size:14px;
+	margin-top:10px;
+}
