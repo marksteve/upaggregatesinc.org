@@ -132,7 +132,7 @@ a:hover {
 }
 
 #soon {
-	font-family: Gotham Light;
+	font-family: "Gotham Light", Helvetica, sans-serif;
 	color:#888;
 	text-align:center;
 	z-index: 0;
