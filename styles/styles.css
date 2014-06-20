@@ -52,13 +52,39 @@ table {
 body {
   background: #fff;
   color: #666;
+  overflow:hidden;
 }
 
-li img {
-  display: block;
+li {
+  height:1000px;
+  width:2000px;
   max-height:100%;
-  width:100%;
+
+  display:block;
 }
+
+.layer {
+	background-size: 2000px auto;
+	background: no-repeat center center fixed;
+}
+
+#lay1 {
+  background-image:url("../images/layer1.png"); }
+
+#lay2 {
+  background-image:url("../images/layer2.png"); }
+
+#lay3 {
+  background-image:url("../images/layer3.png"); }
+
+#lay4 {
+  background-image:url("../images/layer4.png"); }
+
+#lay5 {
+  background:url("../images/layer5.png") no-repeat bottom center fixed; }
+
+#lay6 {
+  background-image:url("../images/layer6.png"); }
 
 .scene {
   padding: 0px;
@@ -103,13 +129,6 @@ li img {
   z-index:-10;
 }
 
-li {
-	max-height:100%;
-	max-width:100%;
-	margin: 0px;
-	padding: 0px;
-}
-
 #icons {
 	width:150px;
 	height:60px;
@@ -132,10 +151,10 @@ a:hover {
 }
 
 #soon {
-	font-family: "Gotham Light", Helvetica, sans-serif;
+	font-family: Gotham Light;
 	color:#888;
 	text-align:center;
-	z-index: 0;
+	z-index: 20;
 }
 
 h1 {
