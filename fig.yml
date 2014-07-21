@@ -9,6 +9,6 @@ wordpress:
   links:
     - mysql:mysql
   ports:
-    - "8000:80"
+    - "8925:80"
   volumes:
     - wp-content:/var/www/html/wp-content
