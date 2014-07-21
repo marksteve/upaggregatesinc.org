@@ -1,0 +1,14 @@
+mysql:
+  image: orchardup/mysql
+  environment:
+    MYSQL_DATABASE: wordpress
+    MYSQL_ROOT_PASSWORD:
+
+wordpress:
+  build: .
+  links:
+    - mysql:mysql
+  ports:
+    - "8000:80"
+  volumes:
+    - wp-content:/var/www/html/wp-content
