@@ -10,5 +10,3 @@ wordpress:
     - mysql:mysql
   ports:
     - "8925:80"
-  volumes:
-    - wp-content:/var/www/html/wp-content
