@@ -30,6 +30,9 @@ WORDPRESS_NONCE_SALT=... (default to unique random SHA1s)
 ## Run
 
 ```
-docker run -d --env-file .env upaggregatesinc.org
+docker run -d \
+  --env-file .env \
+  -p 8080:80 \
+  upaggregatesinc.org
 ```
 
