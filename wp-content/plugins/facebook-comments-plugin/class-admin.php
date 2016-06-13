@@ -24,7 +24,7 @@ function fbcomments_init(){
 		'countmsg' => 'comments',
 		'title' => 'Comments',
 		'titleclass' => '',
-		'width' => '450',
+		'width' => '100%',
 		'countstyle' => '',
 		'linklove' => 'off',
 		'scheme' => 'light',
@@ -283,7 +283,7 @@ if (!isset($options['jquery'])) {$options['jquery'] = "";}
 					<td><input id="num" type="text" name="fbcomments[num]" value="<?php echo $options['num']; ?>" /> <small>default is <strong>5</strong></small></td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="width">Width</label></th>
-					<td><input id="width" type="text" name="fbcomments[width]" value="<?php echo $options['width']; ?>" /> <small>default is <strong>580</strong></small></td>
+					<td><input id="width" type="text" name="fbcomments[width]" value="<?php echo $options['width']; ?>" /> <small>default is <strong>100%</strong>. Keep at this to ensure the comment box is responsive</small></td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="title">Title</label></th>
 					<td><input id="title" type="text" name="fbcomments[title]" value="<?php echo $options['title']; ?>" /> with a CSS class of <input type="text" name="fbcomments[titleclass]" value="<?php echo $options['titleclass']; ?>" /></td>

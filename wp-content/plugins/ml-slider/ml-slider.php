@@ -5,9 +5,9 @@
  * Plugin Name: Meta Slider
  * Plugin URI:  http://www.metaslider.com
  * Description: Easy to use slideshow plugin. Create SEO optimised responsive slideshows with Nivo Slider, Flex Slider, Coin Slider and Responsive Slides.
- * Version:     2.9.1
+ * Version:     3.0.1
  * Author:      Matcha Labs
- * Author URI:  http://www.matchalabs.com
+ * Author URI:  http://www.metaslider.com
  * License:     GPL-2.0+
  * Copyright:   2014 Matcha Labs LTD
  *
@@ -31,7 +31,7 @@ class MetaSliderPlugin {
     /**
      * @var string
      */
-    public $version = '2.9.1';
+    public $version = '3.0.1';
 
 
     /**
@@ -263,9 +263,11 @@ class MetaSliderPlugin {
      */
     public function register_admin_menu() {
 
-        $title = apply_filters( 'metaslider_menu_title', "Meta Slider" );
+        $title = apply_filters( 'metaslider_menu_title', 'Meta Slider' );
 
-        $page = add_menu_page( $title, $title, 'edit_others_posts', 'metaslider', array(
+        $capability = apply_filters( 'metaslider_capability', 'edit_others_posts' );
+
+        $page = add_menu_page( $title, $title, $capability, 'metaslider', array(
                 $this, 'render_admin_page'
             ), METASLIDER_ASSETS_URL . 'metaslider/matchalabs.png', 9501 );
 
@@ -284,17 +286,23 @@ class MetaSliderPlugin {
      */
     public function register_shortcode( $atts ) {
 
-        if ( !isset( $atts['id'] ) ) {
+        extract( shortcode_atts( array(
+            'id' => false,
+            'restrict_to' => false
+        ), $atts, 'metaslider' ) );
+
+
+        if ( ! $id ) {
             return false;
         }
 
         // handle [metaslider id=123 restrict_to=home]
-        if ( isset( $atts['restrict_to'] ) && $atts['restrict_to'] == 'home' && ! is_front_page() ) {
+        if ( $restrict_to == 'home' && ! is_front_page() ) {
             return;
         }
 
         // we have an ID to work with
-        $slider = get_post( $atts['id'] );
+        $slider = get_post( $id );
 
         // check the slider is published and the ID is correct
         if ( ! $slider || $slider->post_status != 'publish' || $slider->post_type != 'ml-slider' ) {
@@ -302,7 +310,7 @@ class MetaSliderPlugin {
         }
 
         // lets go
-        $this->set_slider( $atts['id'], $atts );
+        $this->set_slider( $id, $atts );
         $this->slider->enqueue_scripts();
 
         return $this->slider->render_public_slides();
@@ -407,14 +415,28 @@ class MetaSliderPlugin {
 
         if ( isset( $_GET['slider_id'] ) && absint( $_GET['slider_id'] ) > 0 ) {
             $id = absint( $_GET['slider_id'] );
-
-            echo "<!DOCTYPE html>";
-            echo "<html><head>";
-            echo "<style>body, html { overflow: hidden; margin: 0; padding: 0; }</style>";
-            echo "</head><body>";
-            echo do_shortcode("[metaslider id={$id}]");
-            wp_footer();
-            echo "</body></html>";
+            
+            ?>
+            <!DOCTYPE html>
+            <html>
+                <head>
+                    <style type='text/css'>
+                        body, html { 
+                            overflow: hidden; 
+                            margin: 0; 
+                            padding: 0; 
+                        }
+                    </style>
+                    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+                    <meta http-equiv="Pragma" content="no-cache" />
+                    <meta http-equiv="Expires" content="0" />
+                </head>
+                <body>
+                    <?php echo do_shortcode("[metaslider id={$id}]"); ?>
+                    <?php wp_footer(); ?>
+                </body>
+            </html>
+            <?php
         }
 
         die();
@@ -543,6 +565,12 @@ class MetaSliderPlugin {
 
         // this function should only ever be called from the Meta Slider admin page.
         if ( ! is_admin() ) {
+            return;
+        }
+
+        $capability = apply_filters( 'metaslider_capability', 'edit_others_posts' );
+
+        if ( ! current_user_can( $capability ) ) {
             return;
         }
 
@@ -721,20 +749,21 @@ class MetaSliderPlugin {
 
         $args = apply_filters( 'metaslider_all_meta_sliders_args', $args );
 
-        $the_query = new WP_Query( $args );
+        // WP_Query causes issues with other plugins using admin_footer to insert scripts
+        // use get_posts instead
+        $all_sliders = get_posts( $args );
 
-        while ( $the_query->have_posts() ) {
-            $the_query->the_post();
-            $active = $this->slider && ( $this->slider->id == $the_query->post->ID ) ? true : false;
+        foreach( $all_sliders as $slideshow ) {
+
+            $active = $this->slider && ( $this->slider->id == $slideshow->ID ) ? true : false;
 
             $sliders[] = array(
                 'active' => $active,
-                'title' => get_the_title(),
-                'id' => $the_query->post->ID
+                'title' => $slideshow->post_title,
+                'id' => $slideshow->ID
             );
-        }
 
-        wp_reset_query();
+        } 
 
         return $sliders;
 
@@ -838,7 +867,7 @@ class MetaSliderPlugin {
 
             // number input type
             if ( $row['type'] == 'number' ) {
-                $return .= "<tr class='{$row['type']}'><td class='tipsy-tooltip' title=\"{$row['helptext']}\">{$row['label']}</td><td><input class='option {$row['class']} {$id}' type='number' min='{$row['min']}' max='{$row['max']}' step='{$row['step']}' name='settings[{$id}]' value='{$row['value']}' /><span class='after'>{$row['after']}</span></td></tr>";
+                $return .= "<tr class='{$row['type']}'><td class='tipsy-tooltip' title=\"{$row['helptext']}\">{$row['label']}</td><td><input class='option {$row['class']} {$id}' type='number' min='{$row['min']}' max='{$row['max']}' step='{$row['step']}' name='settings[{$id}]' value='" . absint( $row['value'] ) . "' /><span class='after'>{$row['after']}</span></td></tr>";
             }
 
             // select drop down
@@ -868,7 +897,7 @@ class MetaSliderPlugin {
 
             // text input type
             if ( $row['type'] == 'text' ) {
-                $return .= "<tr class='{$row['type']}'><td class='tipsy-tooltip' title=\"{$row['helptext']}\">{$row['label']}</td><td><input class='option {$row['class']} {$id}' type='text' name='settings[{$id}]' value='{$row['value']}' /></td></tr>";
+                $return .= "<tr class='{$row['type']}'><td class='tipsy-tooltip' title=\"{$row['helptext']}\">{$row['label']}</td><td><input class='option {$row['class']} {$id}' type='text' name='settings[{$id}]' value='" . esc_attr( $row['value'] ) . "' /></td></tr>";
             }
 
             // text input type
@@ -878,7 +907,7 @@ class MetaSliderPlugin {
 
             // text input type
             if ( $row['type'] == 'title' ) {
-                $return .= "<tr class='{$row['type']}'><td class='tipsy-tooltip' title=\"{$row['helptext']}\">{$row['label']}</td><td><input class='option {$row['class']} {$id}' type='text' name='{$id}' value='{$row['value']}' /></td></tr>";
+                $return .= "<tr class='{$row['type']}'><td class='tipsy-tooltip' title=\"{$row['helptext']}\">{$row['label']}</td><td><input class='option {$row['class']} {$id}' type='text' name='{$id}' value='" . esc_attr( $row['value'] ) . "' /></td></tr>";
             }
         }
 
@@ -937,9 +966,9 @@ class MetaSliderPlugin {
                 foreach ( $tabs as $tab ) {
 
                     if ( $tab['active'] ) {
-                        echo "<div class='nav-tab nav-tab-active'><input type='text' name='title'  value='" . $tab['title'] . "' onfocus='this.style.width = ((this.value.length + 1) * 9) + \"px\"' /></div>";
+                        echo "<div class='nav-tab nav-tab-active'><input type='text' name='title'  value='" . esc_attr( $tab['title'] ) . "' onfocus='this.style.width = ((this.value.length + 1) * 9) + \"px\"' /></div>";
                     } else {
-                        echo "<a href='?page=metaslider&amp;id={$tab['id']}' class='nav-tab'>" . $tab['title'] . "</a>";
+                        echo "<a href='?page=metaslider&amp;id={$tab['id']}' class='nav-tab'>" . esc_html( $tab['title'] ) . "</a>";
                     }
 
                 }
@@ -1073,7 +1102,7 @@ class MetaSliderPlugin {
                                             <span class="spinner"></span>
                                         </h3>
                                         <div class="inside">
-                                            <table class="widefat settings">
+                                            <table class="settings">
                                                 <tbody>
                                                     <?php
                                                         $aFields = array(
@@ -1232,10 +1261,15 @@ class MetaSliderPlugin {
                                                             ),
                                                             'smartCrop' => array(
                                                                 'priority' => 30,
-                                                                'type' => 'checkbox',
-                                                                'label' => __( "Smart crop", "metaslider" ),
+                                                                'type' => 'select',
+                                                                'label' => __( "Image Crop", "metaslider" ),
                                                                 'class' => 'option coin flex nivo responsive',
-                                                                'checked' => $this->slider->get_setting( 'smartCrop' ) == 'true' ? 'checked' : '',
+                                                                'value' => $this->slider->get_setting( 'smartCrop' ),
+                                                                'options' => array(
+                                                                    'true' => array( 'label' => __( "Smart", "metaslider" ), 'class' => '' ),
+                                                                    'false' => array( 'label' => __( "Standard", "metaslider" ), 'class' => '' ),
+                                                                    'disabled' => array( 'label' => __( "Disabled", "metaslider" ), 'class' => '' ),
+                                                                ),
                                                                 'helptext' => __( "Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size", "metaslider" )
                                                             ),
                                                             'carouselMode' => array(

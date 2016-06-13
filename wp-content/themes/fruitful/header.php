@@ -31,8 +31,6 @@
 	<link href="<?php bloginfo('template_directory');?>/_include/css/supersized.shutter.css" rel="stylesheet">
 	<link href="<?php bloginfo('template_directory');?>/style.css" rel="stylesheet">
 	<link href="<?php bloginfo('template_directory');?>/css/editor-style.css" rel="stylesheet">
-	<link href="<?php bloginfo('template_directory');?>/header.css" rel="stylesheet">
-	
 	
 	<script type="text/javascript">
 
@@ -64,23 +62,6 @@
 	<script type="text/javascript">
 		skrollr.init();
 	</script>
-	<script type="text/javascript">
-	$(document).ready(function(){
-		$('section[data-type="background"]').each(function(){
-			var $bgobj = $(this); // assigning the object
-		 
-			$(window).scroll(function() {
-				var yPos = -($window.scrollTop() / $bgobj.data('speed')); 
-				 
-				// Put together our final background position
-				var coords = '50% '+ yPos + 'px';
-	 
-				// Move the background
-				$bgobj.css({ backgroundPosition: coords });
-			}); 
-		});    
-	});
-	</script>
 	<!-- End Js -->
 
 
@@ -99,11 +80,12 @@
 		}
 		body_class(trim($additional_body_classes)); 
 	  ?>>
-	  
+	
 			<div class="head-container">
-				<header id="masthead" class="site-header" role="banner">
+		
+					<header id="masthead" class="site-header" role="banner">
 					<div class="sticky-nav">
-						<a id="mobile-nav" class="menu-nav" href="#menu-nav"></a>
+					<a id="mobile-nav" class="menu-nav" href="#menu-nav"></a>
 						<?php	
 							if (fruitful_is_social_header()) { 
 								fruitful_get_socials_icon(); 
@@ -147,31 +129,34 @@
 							</nav>
 						</div>
 					</div>
-				</header><!-- #masthead .site-header -->
-				<div id="history" class="page">
-				  <div id="contain">
-					<div class="row subtitle-page">
-										<?php
-						if((is_page('Organization'))||(is_page('About Us'))||(is_page('History'))||(is_page('Structure'))){
-							echo '<section id="orghead" class="parallax-head" data-type="background" data-speed="10" class="pages">';}
-						if((is_page('Membership'))||(is_page('Application'))||(is_page('Members'))||(is_page('Alumni Relations'))){
-							echo '<section id="memhead" class="parallax-head" data-type="background" data-speed="10" class="pages">';}
-						if((is_page('Events'))||(is_page('Other Events'))){
-							echo '<section id="eventhead" class="parallax-head" data-type="background" data-speed="10" class="pages">';}
-						if((is_page('CE Talk'))){
-							echo '<section id="cethead" class="parallax-head" data-type="background" data-speed="10" class="pages">';}
-						if((is_page('Photofest'))){
-							echo '<section id="pfhead" class="parallax-head" data-type="background" data-speed="10" class="pages">';}
-						if((is_page('AggregatES Quiz'))){
-							echo '<section id="esqhead" class="parallax-head" data-type="background" data-speed="10" class="pages">';}
-						if((is_page('Engineering Week'))){
-							echo '<section id="ewhead" class="parallax-head" data-type="background" data-speed="10" class="pages">';}
-						?></section>	
-					</div>
-				  </div>
-				</div>
-			</div>
+					</header><!-- #masthead .site-header -->	
+			<?php
+			if((is_page('Organization'))||(is_page('About Us'))||(is_page('History'))||(is_page('Structure'))){
+				echo '<img id="org" style="margin-top:-20px; width:100%; height:auto;" src="http://upaggregatesinc.org/wp-content/uploads/2014/12/organization.jpg" />';
+			}
 
+			if((is_page('Membership'))||(is_page('Application'))||(is_page('Members'))||(is_page('Alumni Relations'))){
+				echo '<img id="mem" style="margin-top:-20px; width:100%; height:auto;" src="http://upaggregatesinc.org/wp-content/uploads/2014/12/membership1.jpg" />';
+			}
+
+			if((is_page('Events'))){
+				echo '<img style="margin-top:-20px; width:100%; height:auto;" src="http://upaggregatesinc.org/wp-content/uploads/2014/12/events.jpg" />';
+			}
+			
+			if((is_page('CE Talk'))){
+				echo '<img style="margin-top:-20px; width:100%; height:auto;" src="http://upaggregatesinc.org/wp-content/uploads/2014/12/cetalk1.jpg" />';
+			}
+			
+			if((is_page('Photofest'))){
+				echo '<img style="margin-top:-20px; width:100%; height:auto;" src="http://upaggregatesinc.org/wp-content/uploads/2014/12/photofest.jpg" />';
+			}
+			
+			if((is_page('AggregatES Quiz'))){
+				echo '<img style="margin-top:-20px; width:100%; height:auto;" src="http://upaggregatesinc.org/wp-content/uploads/2014/12/esq1.jpg" />';
+			}
+			
+			?>
+				</div>
 		<div class="container">		
 				<div class="sixteen columns">			
 				</div>		

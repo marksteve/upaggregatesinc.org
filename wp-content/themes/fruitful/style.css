@@ -380,7 +380,6 @@ table {
 caption, th, td {
     font-weight:normal;
     text-align:left;
-	font-size: 14px;
 }
 blockquote:before, blockquote:after, q:before, q:after {
     content:"";
@@ -1011,7 +1010,7 @@ ul#lang-select-popup{
 }
 
 .entry-thumbnail {
-	display: none;
+	display: block;
     float: left;
 	padding:0 4.4%;
     max-width: 91.2%;
@@ -1617,7 +1616,7 @@ table {
 	width: 100%; 
 } 
 table {     
-	font: normal 13px/150% inherit, sans-serif; 
+	font: normal 12px/150% Arial, Helvetica, sans-serif; 
 	background: #fff; 
 	border: 1px solid #d6d6d6; 
 	-webkit-border-radius: 2px; 
@@ -1632,14 +1631,14 @@ table th {
 table thead th, 
 table th {
 	/*color:#333333; */
-	font-size: 13px; 
+	font-size: 14px; 
 	border-bottom: 1px solid #d6d6d6; 
 } 
 
 table tbody td { 
 	/*color: #7D7D7D; */
 	border-bottom: 1px solid #d6d6d6;
-	font-size: 13px;
+	font-size: 12px;
 	font-weight: normal; 
 }
 table tbody tr:last-child td:last-child { 
@@ -1652,7 +1651,7 @@ table tfoot td div {
 
 table tfoot td { 
 	padding: 0; 
-	font-size: 13px 
+	font-size: 12px 
 } 
 
 table tfoot td div{ 
@@ -2128,6 +2127,7 @@ header #logo {
 	float: left;
 	padding: 15px 0;
 	margin-left: 20px;
+	background: url("http://upaggregatesinc.org/wp-content/uploads/2014/12/logo.png") no-repeat center center; 
 }
 
 header #logo a {
@@ -2139,6 +2139,7 @@ header #logo a {
 	   -moz-transition: opacity 0.25s ease-in-out 0s;
 		 -o-transition: opacity 0.25s ease-in-out 0s;
 		    transition: opacity 0.25s ease-in-out 0s;	
+	
 }
 
 header #logo a:hover {
@@ -2550,6 +2551,10 @@ nav#menu #menu-nav li a:hover {
 	z-index: 200;
 }
 
+.head-container {
+	background:url("http://upaggregatesinc.org/wp-content/uploads/2014/12/cover.jpg"> no-repeat;
+	background-size: cover;
+}
 
 .cheader {
 	margin-top:-20px; 
@@ -2558,21 +2563,30 @@ nav#menu #menu-nav li a:hover {
 	min-height:300px;
 }
 
+/**#memheader {
+	background:url("<?php bloginfo('template_directory');?>/images/organization.jpg") no-repeat;
+	background-size: cover;
+	width: 100%;
+	height: 500px;
+}**/
+
 .menu-item a {
 	text-transform: uppercase;
 }
 
-
-img {
-	border: none
+#his { 
+  background: url("http://upaggregatesinc.org/wp-content/uploads/2014/12/cover.jpg") no-repeat center center fixed; 
+  margin: 0 auto;
+  background-size: cover;
+  width: 100%;
+  min-height: 250px;
+  padding-top: 100px;
+  padding-bottom: 50px;
+  position: relative; 
 }
 
-table, tbody, tr, td {
-	font-family:inherit;
-	font-size: 14px;
-	margin: auto;
+#his p, #his h3 {
+	color: #eee;
+	margin: 10px 50px 0px 50px;
 }
 
-.a-icons a:hover {
-	opacity: 0.8;
-}

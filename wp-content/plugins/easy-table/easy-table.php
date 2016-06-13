@@ -4,7 +4,7 @@ Plugin Name: Easy Table
 Plugin URI: http://takien.com/
 Description: Create table in post, page, or widget in easy way.
 Author: Takien
-Version: 1.5
+Version: 1.5.2
 Author URI: http://takien.com/
 */
 
@@ -74,11 +74,19 @@ function __construct(){
 	add_action('contextual_help', 	 array(&$this,'easy_table_help'));
 	
 	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	include_once( dirname(__FILE__) . '/inc/compatibility.php' ); /* since 1.5.2 */
 	
-	if ( shortcode_exists( $this->option('shortcodetag')) OR is_plugin_active('tablepress/tablepress.php') ) {
+	$conflict = false;
+	
+	if ( shortcode_exists( $this->option('shortcodetag') ) ) {
 		add_action('admin_notices',       array(&$this,'easy_table_shortcode_check_notice'));
+		$conflict = true;
 	}
-	else {
+	if (is_plugin_active('tablepress/tablepress.php') AND ('table' == strtolower($this->option('shortcodetag')) ) ) {
+		add_action('admin_notices',       array(&$this,'easy_table_shortcode_check_notice_tablepress'));
+		$conflict = true;
+	}
+	if ( !$conflict ) {
 		add_shortcode($this->option('shortcodetag'),  array(&$this,'easy_table_short_code'));
 	}
 	
@@ -98,7 +106,7 @@ function __construct(){
 private function easy_table_base($return){
 	$easy_table_base = Array(
 				'name' 			=> 'Easy Table',
-				'version' 		=> '1.5',
+				'version' 		=> '1.5.2',
 				'plugin-domain'	=> 'easy-table'
 	);
 	return $easy_table_base[$return];
@@ -107,6 +115,14 @@ private function easy_table_base($return){
 
 function easy_table_shortcode_check_notice() {
 	$shortcode = $this->option('shortcodetag');
+	?>
+	<div class="error">
+		<p><strong>Easy Table</strong>: <?php printf(__('It seems that %1$s shortcode already used by another plugin and potentially cause problem with %2$s. Please change %3$s into another term other than %4$s.  <a href="%5$s">Click here to fix it.</a>','easy-table'), '<code>['.$shortcode.']</code>','Easy Table','<em>Easy Table short code tag</em>','<code>'.$shortcode.'</code>','options-general.php?page=easy-table');?></p>
+	</div>
+	<?php 
+}
+function easy_table_shortcode_check_notice_tablepress() {
+	$shortcode = 'table';
 	?>
 	<div class="error">
 		<p><strong>Easy Table</strong>: <?php printf(__('It seems that %1$s shortcode already used by another plugin and potentially cause problem with %2$s. Please change %3$s into another term other than %4$s.  <a href="%5$s">Click here to fix it.</a>','easy-table'), '<code>['.$shortcode.']</code>','Easy Table','<em>Easy Table short code tag</em>','<code>'.$shortcode.'</code>','options-general.php?page=easy-table');?></p>

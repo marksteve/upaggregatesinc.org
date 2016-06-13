@@ -14,6 +14,10 @@
  */
 
 get_header(); ?>
+			<?php
+			if((is_page('Events'))){
+				echo '<img style="margin-top:-20px; width:100%; height:auto;" src="http://localhost/upaggregatesinc/wp-content/themes/fruitful/images/events.jpg" />';
+			}?>
 		<div class="eleven columns alpha">
 		<div id="primary" class="content-area">
 			<div id="content" class="site-content" role="main">

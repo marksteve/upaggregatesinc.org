@@ -84,9 +84,11 @@ class MetaImageSlide extends MetaSlide {
             $this->use_wp_image_editor()
         );
 
-        $url = $imageHelper->get_image_url();
+        $url = $imageHelper->get_image_url( true );
 
         echo $url . " (" . $settings['width'] . 'x' . $settings['height'] . ")";
+
+        do_action( "metaslider_ajax_resize_image_slide", $slide_id, $slider_id, $settings );
 
         wp_die();
     }
@@ -163,6 +165,36 @@ class MetaImageSlide extends MetaSlide {
                 'content' => $seo_tab
             )
         );
+
+        if ( version_compare( get_bloginfo('version'), 3.9, '>=' ) ) {
+
+            $crop_position = get_post_meta( $slide_id, 'ml-slider_crop_position', true);
+
+            if ( ! $crop_position ) {
+                $crop_position = 'center-center';
+            }
+        
+            $crop_tab = "<div class='row'><label>" . __( "Crop Position", "metaslider" ) . "</label></div>
+                        <div class='row'>
+                            <select class='crop_position' name='attachment[{$slide_id}][crop_position]'>
+                                <option value='left-top' " . selected( $crop_position, 'left-top', false ) . ">" . __( "Top Left", "metaslider" ) . "</option>
+                                <option value='center-top' " . selected( $crop_position, 'center-top', false ) . ">" . __( "Top Center", "metaslider" ) . "</option>
+                                <option value='right-top' " . selected( $crop_position, 'right-top', false ) . ">" . __( "Top Right", "metaslider" ) . "</option>
+                                <option value='left-center' " . selected( $crop_position, 'left-center', false ) . ">" . __( "Center Left", "metaslider" ) . "</option>
+                                <option value='center-center' " . selected( $crop_position, 'center-center', false ) . ">" . __( "Center Center", "metaslider" ) . "</option>
+                                <option value='right-center' " . selected( $crop_position, 'right-center', false ) . ">" . __( "Center Right", "metaslider" ) . "</option>
+                                <option value='left-bottom' " . selected( $crop_position, 'left-bottom', false ) . ">" . __( "Bottom Left", "metaslider" ) . "</option>
+                                <option value='center-bottom' " . selected( $crop_position, 'center-bottom', false ) . ">" . __( "Bottom Center", "metaslider" ) . "</option>
+                                <option value='right-bottom' " . selected( $crop_position, 'right-bottom', false ) . ">" . __( "Bottom Right", "metaslider" ) . "</option>
+                            </select>
+                        </div>";
+
+            $tabs['crop'] = array(
+                'title' => __( "Crop", "metaslider" ),
+                'content' => $crop_tab
+            );
+            
+        }
 
         return apply_filters("metaslider_image_slide_tabs", $tabs, $this->slide, $this->slider, $this->settings);
 
@@ -324,7 +356,7 @@ class MetaImageSlide extends MetaSlide {
 
         $thumb = isset( $slide['data-thumb'] ) && strlen( $slide['data-thumb'] ) ? " data-thumb=\"{$slide['data-thumb']}\"" : "";
 
-        $html = '<li style="display: none; float: left; width: 100%;"' . $thumb . '>' . $html . '</li>';
+        $html = '<li style="display: none; width: 100%;"' . $thumb . '>' . $html . '</li>';
 
         return apply_filters( 'metaslider_image_flex_slider_markup', $html, $slide, $this->settings );
 
@@ -417,6 +449,8 @@ class MetaImageSlide extends MetaSlide {
 
         $this->add_or_update_or_delete_meta( $this->slide->ID, 'title', $fields['title'] );
 
+        $this->add_or_update_or_delete_meta( $this->slide->ID, 'crop_position', $fields['crop_position'] );
+
         if ( isset( $fields['alt'] ) ) {
             update_post_meta( $this->slide->ID, '_wp_attachment_image_alt', $fields['alt'] );
         }
@@ -428,4 +462,3 @@ class MetaImageSlide extends MetaSlide {
 
     }
 }
-?>
